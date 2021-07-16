@@ -7,10 +7,13 @@ export default new class UserController {
   async register(req: Request, res: Response) {
     try{
       const createdUser = await UserRepository.register(req.body)
+      if(createdUser.name === 'MongoError' && createdUser.code == 11000) {
+        return res.status(422).send({ message: 'Email already in use!' });
+      }
       if(createdUser) {
         return res.status(200).json({ user: createdUser, message: 'Registered with success' })
       }
-      return res.status(401).json({ message: 'Email already in use' })
+      return res.status(404).json({ message: 'Internal server error' })
     }catch(e) {
       console.error(e)
       return res.status(400).json({message: 'Error while trying to register user'})

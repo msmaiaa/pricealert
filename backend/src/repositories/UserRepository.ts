@@ -4,18 +4,19 @@ import bcrypt from 'bcrypt'
 import User from '../models/User'
 
 type UserType = { 
-  login: string
+  username: string
   password: string
   email: string
 }
 
 export default new class UserRepository {
-  async register ({login, password, email}: UserType) {
+  async register ({username, password, email}: UserType) {
     try{
+      const cryptedPassword = bcrypt.hashSync(password, 10)
       const createdUser = await User.create({
-        username: login,
+        username,
         email,
-        password: bcrypt.hashSync(password, process.env.SALT || 10)
+        password: cryptedPassword
       })
       if(createdUser) {
         delete createdUser.password
@@ -23,13 +24,13 @@ export default new class UserRepository {
       }
     }catch(ex) {
       console.error(ex)
-      return false
+      return ex
     }
   }
 
   async findOne (email: string) {
     try{
-      const userInDB = await User.findOne({ email })
+      const userInDB = await User.findOne({ email }).exec()
       return userInDB
     }catch(e) {
       console.error(e)

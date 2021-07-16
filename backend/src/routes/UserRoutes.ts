@@ -3,9 +3,10 @@ dotenv.config()
 import express from 'express'
 import UserController from '../controllers/UserController'
 
-const AuthRoutes = express.Router()
+const UserRoutes = express.Router()
 
-AuthRoutes.post('/login',UserController.login)
+UserRoutes.post('/login', UserController.login)
+UserRoutes.post('/register', UserController.register)
 
 
-export default AuthRoutes
+export default UserRoutes
