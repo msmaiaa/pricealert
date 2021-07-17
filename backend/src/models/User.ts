@@ -12,11 +12,30 @@ const UserSchema = new mongoose.Schema({
       trim: true,
       required: true
     },
-    password: String,
-    products: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product"
-    }],
+    sendDiscordNotifications: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    notifyIfPriceGoesHigher: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    notifyIfPriceGoesLower: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    notifyIfProductIsOOS: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    password: {
+      type: String,
+      required: true
+    },
     created: {
       type: Date,
       default: Date.now

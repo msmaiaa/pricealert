@@ -1,11 +1,36 @@
 import mongoose from 'mongoose'
 
 const ProductSchema = new mongoose.Schema({
-    url: String,
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    }
-  })
+    url: {
+      type: String,
+      required: true
+    },
+    imgUrl: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    },
+    store: {
+      type: String,
+      required: true
+    },
+    usersWatching: {
+      type: [String],
+    },
+    created: {
+      type: Date,
+      default: Date.now
+    },
+  }, { timestamps: {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  }})
 
 export default mongoose.model('Product', ProductSchema)
