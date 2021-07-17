@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import UserRepository from '../repositories/UserRepository'
-import EncryptionHelper from '../encryption/EncryptionHelper'
+import EncryptionHelper from '../helpers/EncryptionHelper'
 
 export default new class UserController {
   async register(req: Request, res: Response) {
@@ -27,7 +27,7 @@ export default new class UserController {
       if(!foundUser || !EncryptionHelper.comparePassword(password, foundUser.password)) {
         return res.status(401).json({ message: 'Authentication failed. Invalid email or password.' })
       }
-      const token = jwt.sign({ _id: foundUser._id}, `${process.env.JWT_PRIVATE}`)
+      const token = jwt.sign({ _id: foundUser._id}, `${process.env.JWT_PRIVATE}`, { expiresIn: "2 days" })
       return res.json({token, username: foundUser.username, products: foundUser.products, email: foundUser.email })
     }catch(e) {
       console.error(e)
@@ -35,11 +35,4 @@ export default new class UserController {
     }
   }
 
-  async loginRequired(req: Request, res: Response) {
-
-  }
-
-  async profile(req: Request, res: Response) {
-
-  }
 }
