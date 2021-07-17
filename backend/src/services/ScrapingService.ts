@@ -4,11 +4,11 @@ import { Cluster } from 'puppeteer-cluster'
 export default new class ScrapingService {
   supportedStores = ["kabum", "pichau", "terabyte"]
 
-  detectStore (url: string) {
+  detectStore (url: string): string | boolean {
     for(let store of this.supportedStores) {
       if (url.includes(store)) return store
-      return false
     }
+    return false
   }
 
   async startInfiniteScraping () {
