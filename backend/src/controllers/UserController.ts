@@ -27,7 +27,7 @@ export default new class UserController {
       if(!foundUser || !EncryptionHelper.comparePassword(password, foundUser.password)) {
         return res.status(401).json({ message: 'Authentication failed. Invalid email or password.' })
       }
-      const token = jwt.sign({ _id: foundUser._id}, `${process.env.JWT_PRIVATE}`, { expiresIn: "2 days" })
+      const token = jwt.sign({ _id: foundUser._id, username: foundUser.username, email: foundUser.email}, `${process.env.JWT_PRIVATE}`, { expiresIn: "2 days" })
       return res.json({token, username: foundUser.username, products: foundUser.products, email: foundUser.email })
     }catch(e) {
       console.error(e)
