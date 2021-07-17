@@ -29,6 +29,8 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.2",
+    "puppeteer": "^10.1.0",
+    "puppeteer-cluster": "^0.22.0",
     "socket.io": "^4.1.3"
   }
 }
