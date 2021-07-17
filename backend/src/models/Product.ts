@@ -24,10 +24,6 @@ const ProductSchema = new mongoose.Schema({
     usersWatching: {
       type: [String],
     },
-    created: {
-      type: Date,
-      default: Date.now
-    },
   }, { timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
