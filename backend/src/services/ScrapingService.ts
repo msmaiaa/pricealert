@@ -41,7 +41,6 @@ export default new class ScrapingService {
     const productsWithStore = products.map((p) => {
       return { store: this.detectStore(p), url: p }
     })
-
     const cluster: Cluster = await Cluster.launch({
       puppeteer,
       concurrency: Cluster.CONCURRENCY_CONTEXT,
@@ -69,6 +68,7 @@ export default new class ScrapingService {
           price: 0,
           imgUrl: ''
         }
+        await page.goto(fullProduct.url)
         fullProduct.name = await this.getProductName(fullProduct.store, page)
         fullProduct.imgUrl = await this.getProductImage(fullProduct.store, page)
         const notFormattedPrice = await this.getProductPrice(fullProduct.store, page)

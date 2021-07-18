@@ -5,7 +5,7 @@
     "pichau": "//*[@id='__next']/main/div[2]/div/div[2]/div[2]/div[1]/div/div[1]/div[2]/div"
 },
 "titleElement":{
-    "terabyte": "//*[@id='body']/div[3]/div[1]/div[1]/div[3]/div/h1",
+    "terabyte": "/html/head/title",
     "kabum": "//*[@id='titulo_det']/h1",
     "pichau": "//*[@id='__next']/main/div[2]/div/div[2]/h1"
 },
@@ -13,6 +13,9 @@
     "terabyte": "//*[@id='valVista']",
     "kabum": "//*[@id='pag-detalhes']/div/div[2]/div[2]/div[1]/div[4]/div[2]/span/strong",
     "pichau": "//*[@id='__next']/main/div[2]/div/div[2]/div[2]/div[1]/div/div[1]/div[2]/div[2]"
+},
+"titleElementWithPromo": {
+    "terabyte": "//*[@id='body']/div[3]/div[1]/div[1]/div[3]/div/div/h1"
 },
 "imageElement": {
     "kabum": "//*[@id='imagem-slide']/li[1]/img",
