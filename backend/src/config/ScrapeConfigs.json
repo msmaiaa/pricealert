@@ -1,0 +1,22 @@
+{
+  "priceElement":{
+    "terabyte": "//*[@id='valVista']",
+    "kabum": "//*[@id='pag-detalhes']/div[2]/div[2]/div[2]/div[1]/span/span/span/strong",
+    "pichau": "//*[@id='__next']/main/div[2]/div/div[2]/div[2]/div[1]/div/div[1]/div[2]/div[2]"
+},
+"titleElement":{
+    "terabyte": "//*[@id='body']/div[3]/div[1]/div[1]/div[3]/div/div/h1",
+    "kabum": "//*[@id='titulo_det']/h1",
+    "pichau": "//*[@id='__next']/main/div[2]/div/div[2]/h1"
+},
+"valPromo": {
+    "terabyte": "//*[@id='valVista']",
+    "kabum": "//*[@id='pag-detalhes']/div/div[2]/div[2]/div[1]/div[4]/div[4]/span[1]/span",
+    "pichau": ".price-boleto"
+},
+"imageElement": {
+    "kabum": ".imagem_produto_descricao",
+    "pichau": "//*[@id='__next']/main/div[2]/div/div[1]/div/div[2]/div/div/div/ul/li[1]/div/div/img",
+    "terabyte": "//*[@id='body']/div[3]/div[1]/div[1]/div[2]/div/div[3]/div/div[1]/div[2]/div[1]/div/div/img[2]"
+}
+}
