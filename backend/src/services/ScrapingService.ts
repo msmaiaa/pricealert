@@ -1,9 +1,11 @@
+import * as config from '../config/ScrapeConfigs.json'
+import { ProductType } from '../repositories/ProductsRepository'
+import accounting from 'accounting-js' 
+
 import vanillaPuppeteer from 'puppeteer'
 import { Cluster } from 'puppeteer-cluster'
-import { ProductType } from '../repositories/ProductsRepository'
 import { addExtra } from "puppeteer-extra"
 import Stealth from "puppeteer-extra-plugin-stealth"
-import * as config from '../config/ScrapeConfigs.json'
 const puppeteer = addExtra(vanillaPuppeteer as any)
 puppeteer.use(Stealth())
 
@@ -20,6 +22,7 @@ interface PuppeteerClusterParams {
 
 export default new class ScrapingService {
   supportedStores = ["kabum", "pichau", "terabyte"]
+  storesThatChangePriceXpath = ["kabum", "pichau"]
 
   detectStore (url: string): string | boolean {
     for(let store of this.supportedStores) {
@@ -32,7 +35,7 @@ export default new class ScrapingService {
 
   }
 
-  //initial info gather when the user inserts a new product
+  //initial info gathering when the user inserts a new product
   async getManyProductsInfo (products: [string], userid: string): Promise<any> {
     //: Promise<[ProductType]>
     const productsWithStore = products.map((p) => {
@@ -69,7 +72,9 @@ export default new class ScrapingService {
         await page.goto(fullProduct.url)
         fullProduct.name = await this.getProductName(fullProduct.store, page)
         fullProduct.imgUrl = await this.getProductImage(fullProduct.store, page)
-        // fullProduct.price = await this.getProductPrice(fullProduct.store, page)
+        const notFormattedPrice = await this.getProductPrice(fullProduct.store, page)
+        const formattedPrice = this.formatPriceToFloat(notFormattedPrice)
+        fullProduct.price = formattedPrice
         console.log(fullProduct)
       })
     }
@@ -86,16 +91,65 @@ export default new class ScrapingService {
     return Promise.resolve(title)
   }
 
-  async getProductPrice(store: any, page: vanillaPuppeteer.Page): Promise<number> {
-    return Promise.resolve(1)
-  }
-
-  async getProductImage(store: any, page: vanillaPuppeteer.Page): Promise<string> {
+  async getProductImage(store: string, page: vanillaPuppeteer.Page): Promise<string> {
     const imgUrlXpath: string = config.imageElement[store as 'kabum' | 'terabyte' | 'pichau']
     await page.waitForXPath(imgUrlXpath)
     const imgUrlElement = await page.$x(imgUrlXpath)
     const imgUrl = await page.evaluate(el => el.getAttribute('src'), imgUrlElement[0])
     return Promise.resolve(imgUrl)
+  }
+
+  async getProductPrice(store: string, page: vanillaPuppeteer.Page): Promise<string> {
+    let price = ''
+    if(this.storesThatChangePriceXpath.includes(store)) {
+      price = await this.getProductPriceWithDiscount(store, page)
+      return price
+    }
+    const priceXpath: string = config.priceElement[store as 'kabum' | 'terabyte' | 'pichau'] 
+    await page.waitForXPath(priceXpath)
+    const priceElement = await page.$x(priceXpath)
+    price = await page.evaluate(el => el.innerText, priceElement[0])
+    console.log(price)
+    return Promise.resolve(price)
+  }
+
+  async getProductPriceWithDiscount(store: string, page: vanillaPuppeteer.Page): Promise<string> {
+    let price = ''
+    //switch doesnt work for some reason
+    if(store === 'pichau') {
+      price = await this.handlePichauDiscount(page)  
+    }
+    // else if (store === 'kabum') {
+    //   price = await this.handleKabumDiscount(page) 
+    // }
+    return price
+  }
+
+  async handlePichauDiscount(page: vanillaPuppeteer.Page): Promise<string> {
+    const normalPriceElement: any = await page.$x(config.priceElement['pichau'])
+    let pageIndex = 0
+    if(normalPriceElement.length > 1) {
+      pageIndex = 1
+    }
+    const price: string = await page.evaluate(el => el.innerText, normalPriceElement[pageIndex])
+    return price
+  }
+
+  // async handleKabumDiscount(page: vanillaPuppeteer.Page): Promise<string> {
+  //   let price: string = ''
+  //   const normalPriceElement: any = await page.$x(config.priceElement['kabum'])
+  //   if(normalPriceElement.length > 0) {
+  //     price = await page.evaluate(el => el.innerText, normalPriceElement[0])
+  //     return price
+  //   }
+  //   const priceElementWithDiscount: any = await page.$x(config.priceElementWithPromo['kabum'])
+  //   console.log(priceElementWithDiscount.length)
+  //   price = await page.evaluate(el => el.innerText, priceElementWithDiscount[0])
+  //   return price
+  // }
+
+  formatPriceToFloat(price: string): number {
+    return accounting.unformat(price,",")
   }
 
   async saveProductsInDatabase(products:[ProductType]) {
