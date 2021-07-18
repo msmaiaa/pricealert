@@ -1,14 +1,14 @@
 import Product from '../models/Product'
 
-type ProductType = { 
+export type ProductType = { 
   url: string
   imgUrl: string
   name: string
   price: Number
   store: string
-  usersWatching: [String]
-  createdAt: Date
-  updatedAt: Date
+  usersWatching?: [String]
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export default new class UserRepository {
