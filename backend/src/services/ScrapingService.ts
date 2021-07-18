@@ -6,6 +6,7 @@ import Stealth from "puppeteer-extra-plugin-stealth"
 import * as config from '../config/ScrapeConfigs.json'
 const puppeteer = addExtra(vanillaPuppeteer as any)
 puppeteer.use(Stealth())
+
 interface PuppeteerClusterParams {
   page: vanillaPuppeteer.Page
   data: {
@@ -42,6 +43,19 @@ export default new class ScrapingService {
       puppeteer,
       concurrency: Cluster.CONCURRENCY_CONTEXT,
       maxConcurrency: 1,
+      puppeteerOptions: {
+        //@ts-ignore
+        headless: false,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--disable-gpu'
+        ]
+      }
     });
     for(const prod of productsWithStore) {
       cluster.queue({prod, userid}, async ({page, data}: PuppeteerClusterParams): Promise<any> => {
@@ -53,9 +67,8 @@ export default new class ScrapingService {
           imgUrl: ''
         }
         await page.goto(fullProduct.url)
-        console.log('after page goto')
         fullProduct.name = await this.getProductName(fullProduct.store, page)
-        // fullProduct.imgUrl = await this.getProductImage(fullProduct.store, page)
+        fullProduct.imgUrl = await this.getProductImage(fullProduct.store, page)
         // fullProduct.price = await this.getProductPrice(fullProduct.store, page)
         console.log(fullProduct)
       })
@@ -78,7 +91,11 @@ export default new class ScrapingService {
   }
 
   async getProductImage(store: any, page: vanillaPuppeteer.Page): Promise<string> {
-    return Promise.resolve('1')
+    const imgUrlXpath: string = config.imageElement[store as 'kabum' | 'terabyte' | 'pichau']
+    await page.waitForXPath(imgUrlXpath)
+    const imgUrlElement = await page.$x(imgUrlXpath)
+    const imgUrl = await page.evaluate(el => el.getAttribute('src'), imgUrlElement[0])
+    return Promise.resolve(imgUrl)
   }
 
   async saveProductsInDatabase(products:[ProductType]) {
