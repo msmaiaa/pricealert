@@ -48,7 +48,7 @@ export default new class ScrapingService {
       maxConcurrency: 1,
       puppeteerOptions: {
         //@ts-ignore
-        headless: false,
+        headless: true,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -69,7 +69,6 @@ export default new class ScrapingService {
           price: 0,
           imgUrl: ''
         }
-        await page.goto(fullProduct.url)
         fullProduct.name = await this.getProductName(fullProduct.store, page)
         fullProduct.imgUrl = await this.getProductImage(fullProduct.store, page)
         const notFormattedPrice = await this.getProductPrice(fullProduct.store, page)
@@ -83,12 +82,16 @@ export default new class ScrapingService {
     await cluster.close();
   }
 
-  async getProductName(store: string, page: vanillaPuppeteer.Page): Promise<string> {
-    const titleXpath: string = config.titleElement[store as 'kabum' | 'terabyte' | 'pichau'] 
-    await page.waitForXPath(titleXpath)
-    const titleElement = await page.$x(titleXpath)
-    const title = await page.evaluate(el => el.textContent, titleElement[0])
-    return Promise.resolve(title)
+  async getProductName(store: string, page: vanillaPuppeteer.Page): Promise<any> {
+    try{
+      let titleXpath: string = config.titleElement[store as 'kabum' | 'terabyte' | 'pichau'] 
+      await page.waitForXPath(titleXpath)
+      const titleElement = await page.$x(titleXpath)
+      const title = await page.evaluate(el => el.textContent, titleElement[0])
+      return title
+    }catch(e) {
+      console.error('Error while trying to get product name')
+    }
   }
 
   async getProductImage(store: string, page: vanillaPuppeteer.Page): Promise<string> {
@@ -109,7 +112,6 @@ export default new class ScrapingService {
     await page.waitForXPath(priceXpath)
     const priceElement = await page.$x(priceXpath)
     price = await page.evaluate(el => el.innerText, priceElement[0])
-    console.log(price)
     return Promise.resolve(price)
   }
 
