@@ -155,6 +155,7 @@ export default new class ScrapingService {
     for(let store of this.supportedStores) {
       if (url.includes(store)) return store
     }
+    console.log(123)
     return false
   }
 }
