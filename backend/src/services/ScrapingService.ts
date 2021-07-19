@@ -1,7 +1,6 @@
 import * as config from '../config/ScrapeConfigs.json'
 import { ProductType } from '../repositories/ProductsRepository'
-import accounting from 'accounting-js' 
-
+import Accounting from '../utils/accounting'
 import vanillaPuppeteer from 'puppeteer'
 import { Cluster } from 'puppeteer-cluster'
 import { addExtra } from "puppeteer-extra"
@@ -23,13 +22,6 @@ interface PuppeteerClusterParams {
 export default new class ScrapingService {
   supportedStores = ["kabum", "pichau", "terabyte"]
   storesThatChangePriceXpath = ["kabum", "pichau"]
-
-  detectStore (url: string): string | boolean {
-    for(let store of this.supportedStores) {
-      if (url.includes(store)) return store
-    }
-    return false
-  }
 
   async startInfiniteScraping () {
 
@@ -72,7 +64,7 @@ export default new class ScrapingService {
         fullProduct.name = await this.getProductName(fullProduct.store, page)
         fullProduct.imgUrl = await this.getProductImage(fullProduct.store, page)
         const notFormattedPrice = await this.getProductPrice(fullProduct.store, page)
-        const formattedPrice = this.formatPriceToFloat(notFormattedPrice)
+        const formattedPrice = Accounting.formatPriceToFloat(notFormattedPrice)
         fullProduct.price = formattedPrice
         console.log(fullProduct)
       })
@@ -150,11 +142,10 @@ export default new class ScrapingService {
   //   return price
   // }
 
-  formatPriceToFloat(price: string): number {
-    return accounting.unformat(price,",")
-  }
-
-  async saveProductsInDatabase(products:[ProductType]) {
-
+  detectStore (url: string): string | boolean {
+    for(let store of this.supportedStores) {
+      if (url.includes(store)) return store
+    }
+    return false
   }
 }
