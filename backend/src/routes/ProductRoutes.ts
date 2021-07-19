@@ -1,6 +1,6 @@
 import express from 'express'
 import ProductController from '../controllers/ProductController'
-import verifyJWT from '../helpers/JWTHelper'
+import verifyJWT from '../utils/JWTHelper'
 
 const ProductRoutes = express.Router()
 

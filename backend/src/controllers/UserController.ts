@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import UserRepository from '../repositories/UserRepository'
-import EncryptionHelper from '../helpers/EncryptionHelper'
+import EncryptionHelper from '../utils/EncryptionHelper'
 
 export default new class UserController {
   async register(req: Request, res: Response) {
