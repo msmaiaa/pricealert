@@ -1,5 +1,6 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 import ProductsRepository from '../repositories/ProductsRepository'
+import ScrapingService from '../services/ScrapingService'
 
 export default new class ProductController {
   async index(req: any, res: Response) {
@@ -13,15 +14,23 @@ export default new class ProductController {
     }
   }
 
-  async post(req: Request, res: Response) {
-    return res.status(200).send({message: 'post'})
+  async post(req: any, res: Response) {
+    try{
+      const userid = req.userid
+      res.status(200).send({message: 'Adding products to the database'})
+      await ScrapingService.getManyProductsInfo(req.body.products, userid)
+      return
+    }catch(e) {
+      console.error(e)
+      return res.status(404).send({ message: 'Error while trying to add product' })
+    }
   }
 
-  async put(req: Request, res: Response) {
+  async put(req: any, res: Response) {
     return res.status(200).send({message: 'put'})
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: any, res: Response) {
     return res.status(200).send({message: 'delete'}) 
   }
 }
