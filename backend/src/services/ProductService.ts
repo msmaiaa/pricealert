@@ -22,4 +22,13 @@ export default new class ProductService {
       return
     }
   }
+
+  async insertProducts({ userid, products}: any): Promise<any> {
+    try{
+      await ProductsRepository.create(userid, products)
+      return
+    }catch(e) {
+      console.error(e)
+    }
+  }
 }

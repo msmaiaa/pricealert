@@ -32,4 +32,20 @@ export default new class ProductRepository {
       return e
     }
   }
+
+  async create(userid: string, products: Array<any>) {
+    try{
+      for(let product of products) {
+        await Product.create({
+          ...product,
+          usersWatching: [
+            userid
+          ]
+        })
+      }
+      return
+    }catch(e) {
+      console.error(e)
+    }
+  }
 }

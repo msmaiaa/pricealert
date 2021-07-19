@@ -18,6 +18,7 @@ export default new class ProductsMiddleware {
     const filteredProducts = productsMapped.filter((product) => {
       return product
     })
+    if (filteredProducts.length < 1) return res.send(200).send({ message: 'Products added' })
     req.body.products = filteredProducts
     next()
   }
