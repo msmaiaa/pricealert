@@ -27,19 +27,14 @@ export default new class ScrapingService {
 
   }
 
-  //initial info gathering when the user inserts a new product
-  async getManyProductsInfo (products: [string], userid: string): Promise<any> {
-    //: Promise<[ProductType]>
-    const productsWithStore = products.map((p) => {
-      return { store: this.detectStore(p), url: p }
-    })
+  async generateCluster(maxConcurrency: number, headless: boolean): Promise<Cluster> {
     const cluster: Cluster = await Cluster.launch({
       puppeteer,
       concurrency: Cluster.CONCURRENCY_CONTEXT,
-      maxConcurrency: 1,
+      maxConcurrency,
       puppeteerOptions: {
         //@ts-ignore
-        headless: true,
+        headless,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -51,6 +46,18 @@ export default new class ScrapingService {
         ]
       }
     });
+    return cluster
+  }
+
+  //initial info gathering when the user inserts a new product
+  async getManyProductsInfo (products: [string], userid: string): Promise<any> {
+    //: Promise<[ProductType]>
+    const productsWithStore = products.map((p) => {
+      return { store: this.detectStore(p), url: p }
+    })
+
+    const cluster: Cluster = await this.generateCluster(1, true)
+
     for(const prod of productsWithStore) {
       cluster.queue({prod, userid}, async ({page, data}: PuppeteerClusterParams): Promise<any> => {
         const fullProduct = {
