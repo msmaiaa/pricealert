@@ -11,11 +11,22 @@ export type ProductType = {
   updatedAt?: Date
 }
 
-export default new class UserRepository {
-  async findAll(userid: string) {
+
+export default new class ProductRepository {
+  async findAllByUserId(userid: string) {
     try{
-      const products = await Product.find().where('usersWatching').in([userid])
+      const products = await Product.find().where('usersWatching').in(userid)
       return products
+    }catch(e) {
+      console.error(e)
+      return e
+    }
+  }
+
+  async findByUrl(url: string) {
+    try{
+      const product = await Product.find().where(url)
+      return product
     }catch(e) {
       console.error(e)
       return e
