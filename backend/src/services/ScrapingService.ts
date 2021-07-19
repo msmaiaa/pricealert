@@ -55,6 +55,7 @@ export default new class ScrapingService {
     const productsWithStore = products.map((p) => {
       return { store: this.detectStore(p), url: p }
     })
+    let productsWithInfo: Array<ProductType> = []
 
     const cluster: Cluster = await this.generateCluster(1, true)
 
@@ -73,12 +74,13 @@ export default new class ScrapingService {
         const notFormattedPrice = await this.getProductPrice(fullProduct.store, page)
         const formattedPrice = Accounting.formatPriceToFloat(notFormattedPrice)
         fullProduct.price = formattedPrice
-        console.log(fullProduct)
+        productsWithInfo.push(fullProduct)
       })
     }
 
     await cluster.idle();
     await cluster.close();
+    return productsWithInfo
   }
 
   async getProductName(store: string, page: vanillaPuppeteer.Page): Promise<any> {

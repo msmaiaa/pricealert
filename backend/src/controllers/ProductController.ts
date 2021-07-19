@@ -18,7 +18,7 @@ export default new class ProductController {
     try{
       const userid = req.userid
       res.status(200).send({message: 'Adding products to the database'})
-      await ScrapingService.getManyProductsInfo(req.body.products, userid)
+      const productsWithInfo = await ScrapingService.getManyProductsInfo(req.body.products, userid)
       return
     }catch(e) {
       console.error(e)
