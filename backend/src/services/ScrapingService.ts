@@ -50,7 +50,7 @@ export default new class ScrapingService {
   }
 
   //initial info gathering when the user inserts a new product
-  async getManyProductsInfo (products: [string], userid: string): Promise<any> {
+  async getManyProductsInfo (products: [string]): Promise<any> {
     //: Promise<[ProductType]>
     const productsWithStore = products.map((p) => {
       return { store: this.detectStore(p), url: p }
@@ -60,7 +60,7 @@ export default new class ScrapingService {
     const cluster: Cluster = await this.generateCluster(1, true)
 
     for(const prod of productsWithStore) {
-      cluster.queue({prod, userid}, async ({page, data}: PuppeteerClusterParams): Promise<any> => {
+      cluster.queue({ prod }, async ({page, data}: PuppeteerClusterParams): Promise<any> => {
         const fullProduct = {
           url: data.prod.url,
           store: data.prod.store,
