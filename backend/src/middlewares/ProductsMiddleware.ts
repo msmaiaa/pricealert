@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Response } from "express"
 import ProductService from "../services/ProductService"
 
 
@@ -7,6 +7,14 @@ export default new class ProductsMiddleware {
     const products = req.body.products
     const promises = products.map(async (productUrl: string) => {
       const productInDb = await ProductService.findByUrl(productUrl)
+
+      //if user already watching
+      if(productInDb.usersWatching.includes(req.userid)) {
+        console.log('includes userid')
+        return false
+      }
+
+      //if product url already in use, just insert the user on the usersWatching field
       if(productInDb) {
         await ProductService.insertUserIntoProduct(req.userid, productUrl)
         return false
