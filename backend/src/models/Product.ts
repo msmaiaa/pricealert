@@ -3,7 +3,8 @@ import mongoose from 'mongoose'
 const ProductSchema = new mongoose.Schema({
     url: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     imgUrl: {
       type: String,
