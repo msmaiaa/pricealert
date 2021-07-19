@@ -7,7 +7,7 @@ export default new class ProductsMiddleware {
     const products = req.body.products
     const promises = products.map(async (productUrl: string) => {
       const productInDb = await ProductService.findByUrl(productUrl)
-      if(productInDb.length > 0) {
+      if(productInDb) {
         await ProductService.insertUserIntoProduct(req.userid, productUrl)
         return false
       }
@@ -18,7 +18,7 @@ export default new class ProductsMiddleware {
     const filteredProducts = productsMapped.filter((product) => {
       return product
     })
-    if (filteredProducts.length < 1) return res.send(200).send({ message: 'Products added' })
+    if (filteredProducts.length < 1) return res.status(200).send({ message: 'Products added' })
     req.body.products = filteredProducts
     next()
   }
