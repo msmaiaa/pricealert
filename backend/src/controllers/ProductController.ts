@@ -27,10 +27,6 @@ export default new class ProductController {
     }
   }
 
-  async put(req: any, res: Response) {
-    return res.status(200).send({message: 'put'})
-  }
-
   async delete(req: any, res: Response) {
     return res.status(200).send({message: 'delete'}) 
   }
