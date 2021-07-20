@@ -8,18 +8,16 @@ export default new class ProductsMiddleware {
     const promises = products.map(async (productUrl: string) => {
       const productInDb = await ProductService.findByUrl(productUrl)
 
+      if (!productInDb) return productUrl
       //if user already watching
       if(productInDb.usersWatching.includes(req.userid)) {
         console.log('includes userid')
         return false
       }
 
-      //if product url already in use, just insert the user on the usersWatching field
-      if(productInDb) {
-        await ProductService.insertUserIntoProduct(req.userid, productUrl)
-        return false
-      }
-      return productUrl
+      //if product url already in use and the user is not watching, just insert the user on the usersWatching field
+      await ProductService.insertUserIntoProduct(req.userid, productUrl)
+      return false
     })
     const productsMapped = await Promise.all(promises)
     

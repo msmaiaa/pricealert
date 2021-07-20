@@ -25,7 +25,7 @@ export default new class ProductRepository {
 
   async findByUrl(url: string) {
     try{
-      const product = await Product.findOne().where(url)
+      const product = await Product.findOne({ url })
       return product
     }catch(e) {
       console.error(e)

@@ -57,7 +57,7 @@ export default new class ScrapingService {
     })
     let productsWithInfo: Array<ProductType> = []
 
-    const cluster: Cluster = await this.generateCluster(1, true)
+    const cluster: Cluster = await this.generateCluster(1, false)
 
     for(const prod of productsWithStore) {
       cluster.queue({ prod }, async ({page, data}: PuppeteerClusterParams): Promise<any> => {
@@ -155,7 +155,6 @@ export default new class ScrapingService {
     for(let store of this.supportedStores) {
       if (url.includes(store)) return store
     }
-    console.log(123)
     return false
   }
 }
