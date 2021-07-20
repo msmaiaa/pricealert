@@ -7,7 +7,6 @@ const ProductRoutes = express.Router()
 
 ProductRoutes.get('/', verifyJWT, ProductController.index)
 ProductRoutes.post('/', verifyJWT, ProductsMiddleware.filterProducts, ProductController.post)
-ProductRoutes.put('/', verifyJWT, ProductController.put)
 ProductRoutes.delete('/', verifyJWT, ProductController.delete)
 
 export default ProductRoutes

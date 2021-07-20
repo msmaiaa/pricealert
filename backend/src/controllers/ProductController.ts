@@ -1,6 +1,7 @@
 import ScrapingService from '../services/ScrapingService'
 import ProductService from '../services/ProductService'
 import { Response } from 'express'
+import { ProductType } from '../repositories/ProductsRepository'
 
 export default new class ProductController {
   async index(req: any, res: Response) {
@@ -27,11 +28,17 @@ export default new class ProductController {
     }
   }
 
-  async put(req: any, res: Response) {
-    return res.status(200).send({message: 'put'})
-  }
-
   async delete(req: any, res: Response) {
-    return res.status(200).send({message: 'delete'}) 
+    try{
+      const userid: string = req.userid
+      const products: Array<ProductType> = req.body.products
+      const deletedProducts = await ProductService.deleteProducts(userid, products)
+
+      if(!deletedProducts || deletedProducts.length < 1) return res.status(500).send({ message: "Couldn't delete the products" })
+      return res.status(200).send({ message: 'Products deleted with success!' }) 
+    }catch(e) {
+      console.error(e)
+      return res.status(500).send({ message: 'Error while trying to delete product' })
+    }
   }
 }

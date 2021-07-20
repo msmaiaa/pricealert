@@ -9,6 +9,7 @@ export type ProductType = {
   usersWatching?: [String]
   createdAt?: Date
   updatedAt?: Date
+  _id?: string
 }
 
 
@@ -22,6 +23,18 @@ export default new class ProductRepository {
       return e
     }
   }
+  
+  async findAllByIdArray(productsArray: Array<string | undefined>) {
+    try{
+      const products = await Product.find({
+        _id: { $in: productsArray }
+      })
+      return products
+    }catch(e) {
+      console.error(e)
+      return false
+    }
+  }
 
   async findByUrl(url: string) {
     try{
@@ -32,6 +45,7 @@ export default new class ProductRepository {
       return e
     }
   }
+
 
   async create(userid: string, products: Array<any>) {
     try{
@@ -44,6 +58,28 @@ export default new class ProductRepository {
         })
       }
       return
+    }catch(e) {
+      console.error(e)
+    }
+  }
+
+  async deleteUserFromProduct(userid: string, productId: string) {
+    try{
+      const userRemoved = Product.updateOne({ _id: productId}, {
+        $pull: {
+          usersWatching: userid
+        }
+      })
+      return userRemoved
+    }catch(e) {
+      console.error(e)
+    }
+  }
+
+  async deleteProductById(productId: string) {
+    try{
+      const deletedProduct = Product.deleteOne({ _id: productId })
+      return deletedProduct
     }catch(e) {
       console.error(e)
     }
