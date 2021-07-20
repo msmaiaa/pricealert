@@ -31,4 +31,24 @@ export default new class ProductService {
       console.error(e)
     }
   }
+
+  async deleteProducts(userid: string, products: Array<ProductType>) {
+    try{
+      const productsIdList: Array<string | undefined> = products.map((product) => {
+        return product._id
+      })
+      const productsToDelete = await ProductsRepository.findAllByIdArray(productsIdList)
+      const productsToDeletePromises = productsToDelete.map((productInMap: ProductType | any) => {
+        if(productInMap.usersWatching?.length === 1) {
+          return ProductsRepository.deleteProductById(productInMap._id)
+        }
+        return ProductsRepository.deleteUserFromProduct(userid, productInMap._id)
+      })
+      const deleted = Promise.all(productsToDeletePromises)
+      return productsToDelete
+    }catch(e) {
+      console.error(e)
+      return false
+    }
+  }
 }
