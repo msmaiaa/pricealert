@@ -3,7 +3,16 @@ import ProductsRepository, { ProductType } from '../repositories/ProductsReposit
 export default new class ProductService {
   async findAllWithUserId(userid: string): Promise<Array<ProductType>> {
     const productsInDB = await ProductsRepository.findAllByUserId(userid)
-    return productsInDB
+    const filteredProducts = productsInDB.map((product: ProductType | any) => {
+      return this.removeFieldFromUserObject('usersWatching', product)
+    })
+    return filteredProducts
+  }
+
+  removeFieldFromUserObject(field: string, product: any) {
+    const filteredProduct = {...product._doc}
+    delete filteredProduct[field]
+    return filteredProduct
   }
 
   async findByUrl(url: string): Promise<any> {
