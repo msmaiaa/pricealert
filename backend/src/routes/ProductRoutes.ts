@@ -1,8 +1,9 @@
 import express from 'express'
 import ProductController from '../controllers/ProductController'
-import verifyJWT from '../utils/JWTHelper'
+import AuthenticationService from '../services/AuthenticationService'
 import ProductsMiddleware from '../middlewares/ProductsMiddleware'
 
+const verifyJWT = AuthenticationService.verifyJWT
 const ProductRoutes = express.Router()
 
 ProductRoutes.get('/', verifyJWT, ProductController.index)
