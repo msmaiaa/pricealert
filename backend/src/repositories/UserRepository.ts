@@ -10,7 +10,7 @@ type UserType = {
 }
 
 export default new class UserRepository {
-  async register ({username, password, email}: UserType) {
+  async insertOne ({username, password, email}: UserType) {
     try{
       const cryptedPassword = bcrypt.hashSync(password, 10)
       const createdUser = await User.create({

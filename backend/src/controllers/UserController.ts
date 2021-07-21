@@ -2,11 +2,13 @@ import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import UserRepository from '../repositories/UserRepository'
 import EncryptionHelper from '../utils/EncryptionHelper'
+import UserService from '../services/UserService'
 
 export default new class UserController {
   async register(req: Request, res: Response) {
     try{
-      const createdUser = await UserRepository.register(req.body)
+      const { email, password, username } = req.body
+      const createdUser = await UserService.registerUser({ email, username, password })
       if(createdUser.name === 'MongoError' && createdUser.code == 11000) {
         return res.status(422).send({ message: 'Email already in use!' });
       }
@@ -23,7 +25,7 @@ export default new class UserController {
   async login(req: Request, res: Response) {
     try{
       const { email, password } = req.body
-      const foundUser = await UserRepository.findOne(email)
+      const foundUser = await UserService.findUserByEmail(email)
       if(!foundUser || !EncryptionHelper.comparePassword(password, foundUser.password)) {
         return res.status(401).json({ message: 'Authentication failed. Invalid email or password.' })
       }
