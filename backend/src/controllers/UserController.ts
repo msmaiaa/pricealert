@@ -30,7 +30,7 @@ export default new class UserController {
         return res.status(401).json({ message: 'Authentication failed. Invalid email or password.' })
       }
       const token = AuthenticationService.generateToken({ _id: foundUser._id, username: foundUser.username, email })
-      return res.json({token, user: {username: foundUser.username, products: foundUser.products, email: foundUser.email, _id: foundUser._id }})
+      return res.json({token, username: foundUser.username, products: foundUser.products, email: foundUser.email, _id: foundUser._id })
     }catch(e) {
       console.error(e)
       return res.status(400).json({ message: 'Error while trying to login user' })
