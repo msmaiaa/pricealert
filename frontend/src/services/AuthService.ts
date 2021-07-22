@@ -22,15 +22,13 @@ interface ILoginRequestResponse {
 
 class AuthService {
   async login({ email, password }: ILoginFormParams) {
-    try{
-      const axiosResponse = await axios.post(API_URL + '/login', { email, password })
-      if (axiosResponse.data.token) {
-        localStorage.setItem('user', JSON.stringify(axiosResponse.data))
+    return axios.post(API_URL + '/login', { email, password })
+    .then((response) => {
+      if (response.data.token) {
+        localStorage.setItem('user', JSON.stringify(response.data))
       }
-      return axiosResponse.data
-    }catch(e) {
-      return e
-    }
+      return response.data
+    })
   }
 
   logout() {
@@ -38,12 +36,11 @@ class AuthService {
   }
 
   async register({ username, email, password}: IRegisterFormParams) {
-    const response = await axios.post(API_URL + 'register', {
+    return axios.post(API_URL + 'register', {
       username,
       email,
       password
     })
-    return response
   }
 }
 
