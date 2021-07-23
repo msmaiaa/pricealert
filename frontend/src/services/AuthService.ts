@@ -37,7 +37,6 @@ class AuthService {
       const response = await axios.post(API_URL + '/login', { email, password })
       if(response.data.token || response.status === 200) {
         localStorage.setItem('user', JSON.stringify(response.data))
-        axios.defaults.headers.Authorization = 'x-access-token:' + response.data.token
         return response
       }
     }catch(error){

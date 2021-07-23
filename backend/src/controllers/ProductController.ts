@@ -11,7 +11,7 @@ export default new class ProductController {
       return res.status(200).send({ message: 'User products fetched with success', body: userProductsInDB })
     }catch(e) {
       console.error(e)
-      return res.status(404).send({ message: 'Error while trying to fetch user products' })
+      return res.status(500).send({ message: 'Error while trying to fetch user products' })
     }
   }
 
@@ -24,7 +24,7 @@ export default new class ProductController {
       return
     }catch(e) {
       console.error(e)
-      return res.status(404).send({ message: 'Error while trying to add product' })
+      return res.status(500).send({ message: 'Error while trying to add product' })
     }
   }
 

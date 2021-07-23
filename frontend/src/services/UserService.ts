@@ -15,16 +15,31 @@ interface IProduct {
 }
 
 class UserService {
-  async getAllUserProducts(): Promise<any> {
-    return axios.get(API_URL, { headers: authHeader() })
+  async getAllUserProducts(): Promise<Array<IProduct> | any> {
+    try{
+      const products = await axios.get(API_URL, { headers: authHeader() })
+      return products
+    }catch(error) {
+      console.error(error)
+    }
   }
 
-  async insertProducts(products: Array<string>) {
-    return axios.post(API_URL, { headers: authHeader() })
+  async insertProducts(products: Array<string>): Promise<any> {
+    try{
+      const insertedProducts = await axios.post(API_URL, { headers: authHeader() })
+      return insertedProducts
+    }catch(error){
+      console.error(error)
+    }
   }
 
-  async deleteProducts() {
-    return axios.delete(API_URL, { headers: authHeader() })
+  async deleteProducts(): Promise<any> {
+    try{
+      const deletedProducts = await axios.delete(API_URL, { headers: authHeader() })
+      return deletedProducts
+    }catch(error){
+      console.error(error)
+    }
   }
 }
 
