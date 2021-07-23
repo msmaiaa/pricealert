@@ -50,9 +50,11 @@ const RegisterPage = () => {
   const alert = useAlert()
 
 
-  if(authenticated) {
-    history.push('/')
-  }
+  useEffect(() => {
+    if(authenticated) {
+      history.push('/')
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

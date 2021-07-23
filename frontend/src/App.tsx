@@ -25,21 +25,16 @@ function App(props: any) {
         <Navbar/>
         <AlertProvider template={AlertTemplate} {...alertOptions}>
             <Switch>
+              <Route path="/login" component={LoginPage}/>
+              <Route path="/register" component={RegisterPage}/>
               <UserProvider>
-                <ProtectedRoute exact path="/" component={HomePage} />
+                <ProtectedRoute path="/" component={HomePage} />
               </UserProvider>
-              <Route exact path="/login">
-                <LoginPage/>
-              </Route>
-              <Route exact path="/register">
-                <RegisterPage/>
-              </Route> 
               <Route component={LoginPage}/>
             </Switch>
         </AlertProvider>
       </AuthProvider>
     </div>
-  );
-}
+    )}
 
 export default App
