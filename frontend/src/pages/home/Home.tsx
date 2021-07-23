@@ -1,7 +1,13 @@
+import { useEffect, useState, useContext } from "react"
+import { AuthContext } from "../../Context/AuthContext"
 
 const HomePage = () => {
+  const { userInfo } = useContext(AuthContext)
+  useEffect(()=>{
+    console.log(userInfo)
+  },[])
   return(
-    <p>Home Page</p>
+    <p>{userInfo.email}</p>
   )
 }
 
