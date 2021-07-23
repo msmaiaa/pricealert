@@ -2,7 +2,8 @@ import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../../Context/AuthContext"
 import styled from 'styled-components'
 import { FaUser } from 'react-icons/fa'
-import UserService from "../../services/UserService"
+import generateDataTableColumns from "../../helpers/generateDataTableColumns"
+import DataTable from 'react-data-table-component'
 import { UserContext } from "../../Context/UserContext"
 
 const HomePageContainer = styled.div`
@@ -43,9 +44,18 @@ const HeaderIcon = styled(FaUser)`
   margin-right: 5px;
 `
 
+const ProductList = styled.div`
+  width: 100%;
+  height: 450px;
+`
+
 const HomePage = () => {
   const { userProducts, handleUserProducts } = useContext(UserContext)
   const { userInfo, isLoading } = useContext(AuthContext)
+
+  const handleRowSelect = (state: any) => {
+    console.log('Selected rows: ' + state.selectedRows)
+  }
 
   useEffect(()=> {
     if(userInfo) {
@@ -69,6 +79,17 @@ const HomePage = () => {
             <HeaderIcon/>
           </Header>
           {userProducts && userProducts.length < 1 && <p>Looks like that you don't have any saved products, try adding one</p>}
+          {userProducts && userProducts.length >= 1 &&
+            <ProductList>
+              <DataTable 
+                title="Products"
+                columns={generateDataTableColumns()}
+                data={userProducts}
+                selectableRows
+                onSelectedRowsChange={handleRowSelect}
+              />
+            </ProductList>
+          }
         </ProductListContainer>
       </HomePageContainer>
     )

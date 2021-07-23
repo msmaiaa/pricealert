@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.12.2",
+    "@material-ui/data-grid": "^4.0.0-alpha.34",
+    "@material-ui/x-grid": "^4.0.0-alpha.34",
+    "@material-ui/x-license": "^4.0.0-alpha.34",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -16,6 +19,7 @@
     "react": "^17.0.2",
     "react-alert": "^7.0.3",
     "react-alert-template-mui": "^1.0.7",
+    "react-data-table-component": "^7.0.0-rc2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
