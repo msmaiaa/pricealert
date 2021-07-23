@@ -17,10 +17,17 @@ const AuthProvider: React.FC = ({children}) => {
       axios.defaults.headers.Authorization = 'x-access-token: ' + user.token 
       setUserInfo(JSON.parse(user))
       setAuthenticated(true)
+      setLoading(false)
     }
 
-    setLoading(false)
+    setLoading(true)
   },[])
+
+  useEffect(()=>{
+    if(userInfo) {
+      setLoading(false)
+    }
+  },[userInfo])
 
   
   async function handleLogin({ email, password }: ILoginFormParams) {
@@ -41,12 +48,8 @@ const AuthProvider: React.FC = ({children}) => {
     history.push('/login')
   }
 
-  if(isLoading) {
-    return <h1>Loading...</h1>
-  }
-
   return(
-    <AuthContext.Provider value={{ authenticated, handleLogin, handleLogout, userInfo }}>
+    <AuthContext.Provider value={{ authenticated, handleLogin, handleLogout, userInfo, isLoading }}>
       {children}
     </AuthContext.Provider>
   )

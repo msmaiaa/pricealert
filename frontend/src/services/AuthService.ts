@@ -50,7 +50,7 @@ class AuthService {
 
   async register({ username, email, password}: IRegisterFormParams):Promise<any> {
     try{
-      const response = await axios.post(API_URL + 'register', {
+      const response = await axios.post(API_URL + '/register', {
         username,
         email,
         password
