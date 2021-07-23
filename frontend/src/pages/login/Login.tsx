@@ -9,7 +9,7 @@ import { useAlert } from 'react-alert'
 
 
 const LoginPageContainer = styled.div`
-  min-height: 100vh;
+  margin-top: 200px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -18,9 +18,10 @@ const LoginPageContainer = styled.div`
 
 const FormContainer = styled.div`
   width: 300px;
-  box-shadow: 0px 0px 4px 0px #000000;
+  box-shadow: 1px 1px 15px -2px #000000;
   padding: 20px 30px;
   border-radius: 5px;
+  background-color: #fff;
 `
 
 const Form = styled.form`
