@@ -3,12 +3,11 @@ import './App.css';
 import LoginPage from './pages/login/Login';
 import RegisterPage from './pages/register/Register';
 import HomePage from './pages/home/Home';
-
-import { history } from './helpers/history'
-import { Router, Switch, Route } from "react-router-dom";
-import ProtectedRoute from './helpers/ProtectedRoute'
 import Navbar from './components/navbar/Navbar';
+import ProtectedRoute from './helpers/ProtectedRoute'
 import { AuthProvider } from './Context/AuthContext'
+
+import { Switch, Route } from "react-router-dom";
 import { transitions, positions, Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 
@@ -23,9 +22,8 @@ function App(props: any) {
   return (
     <div className="App">
       <AuthProvider>
+        <Navbar/>
         <AlertProvider template={AlertTemplate} {...alertOptions}>
-          <Navbar/>
-          <Router history={history}>
             <Switch>
               <ProtectedRoute exact path="/" component={HomePage} />
               <Route exact path="/login">
@@ -36,7 +34,6 @@ function App(props: any) {
               </Route> 
               <Route component={LoginPage}/>
             </Switch>
-          </Router>
         </AlertProvider>
       </AuthProvider>
     </div>
