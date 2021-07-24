@@ -11,7 +11,6 @@ export default new class ProductsMiddleware {
       if (!productInDb) return productUrl
       //if user already watching
       if(productInDb.usersWatching.includes(req.userid)) {
-        console.log('includes userid')
         return false
       }
 

@@ -26,7 +26,7 @@ class UserService {
 
   async insertProducts(products: Array<string>): Promise<any> {
     try{
-      const insertedProducts = await axios.post(API_URL, { headers: authHeader() })
+      const insertedProducts = await axios.post(API_URL, { products: products  }, { headers: authHeader() })
       return insertedProducts
     }catch(error){
       console.error(error)
