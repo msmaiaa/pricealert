@@ -53,10 +53,24 @@ const ProductList = styled.div`
   min-height: 200px;
   margin-top: 15px;
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 `
 
 const StyledButton = styled(Button)`
 
+`
+
+const ProductListHeaderContainer = styled.div`
+  display: flex;
+  align-items: flex-end;
+`
+
+const ProductListTitle = styled.p`
+  font-size: 26px;
+  margin: 0;
+  font-weight: 300;
+  display: block;
 `
 
 interface IProduct {
@@ -109,8 +123,10 @@ const HomePage = () => {
           {userProducts && userProducts.length < 1 && <p>Looks like that you don't have any saved products, try adding one</p>}
           {userProducts && userProducts.length >= 1 &&
             <ProductList>
+              <ProductListHeaderContainer>
+                <ProductListTitle>Products</ProductListTitle>
+              </ProductListHeaderContainer>
               <DataTable 
-                title="Products"
                 columns={generateDataTableColumns()}
                 data={userProducts}
                 selectableRows
