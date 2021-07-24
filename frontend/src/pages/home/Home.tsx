@@ -40,7 +40,7 @@ margin-right: 5px;
 
 const HeaderButton = styled(Link)`
 background-color: #4a148c;
-box-shadow: 2px 2px 0px 2px #000000;
+box-shadow: 2px 2px 0px 1px #000000;
 
 color: #fff;
 display: flex;
