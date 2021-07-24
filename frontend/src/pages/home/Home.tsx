@@ -4,6 +4,8 @@ import { FaUser } from 'react-icons/fa'
 import { useContext } from 'react'
 import { AuthContext } from '../../Context/AuthContext'
 import UserProducts from './userProducts/UserProducts'
+import AddProducts from './addProducts/AddProducts'
+import UserSettings from './userSettings/UserSettings'
 
 const HomePageContainer = styled.div`
   margin-top: 100px;
@@ -24,14 +26,33 @@ align-items: center;
 `
 
 const HeaderText = styled.div`
-color: #000;
+color: #fff;
 margin-right: 10px;
+
+transition: all .2s;
 `
 
 const HeaderIcon = styled(FaUser)`
 height: 12px;
 width: 12px;
 margin-right: 5px;
+`
+
+const HeaderButton = styled(Link)`
+background-color: #4a148c;
+box-shadow: 2px 2px 0px 2px #000000;
+
+color: #fff;
+display: flex;
+align-items: center;
+justify-content: center;
+&:not(:last-child) {
+  margin-right: 25px;
+}
+font-size: 14px;
+padding: 8px 16px;
+
+transition: all .2s;
 `
 
 const ProductListContainer = styled.div`
@@ -67,11 +88,17 @@ const HomePage = () => {
     <HomePageContainer>
       <ProductListContainer>
           <Header>
-            <HeaderText>{userInfo.username}</HeaderText>
-            <HeaderIcon/>
+            <HeaderButton to={`${path}/`}>products</HeaderButton>
+            <HeaderButton to={`${path}/add`}>insert product</HeaderButton>
+            <HeaderButton to={`${path}/settings`}>
+              <HeaderText>settings</HeaderText>
+              <HeaderIcon/>
+            </HeaderButton>
           </Header>
           <Switch>
             <Route exact path={path} component={UserProducts}/>
+            <Route path={`${path}/add`} component={AddProducts}/>
+            <Route exact path={`${path}/settings`} component={UserSettings}/>
           </Switch>
       </ProductListContainer>
     </HomePageContainer>
