@@ -52,7 +52,7 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if(authenticated) {
-      history.push('/')
+      history.push('/home')
     }
   }, [])
 

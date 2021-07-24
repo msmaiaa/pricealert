@@ -7,7 +7,7 @@ import Navbar from './components/navbar/Navbar';
 import ProtectedRoute from './helpers/ProtectedRoute'
 import { AuthProvider } from './Context/AuthContext'
 import { UserProvider } from './Context/UserContext';
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { transitions, positions, Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 
@@ -25,14 +25,14 @@ function App(props: any) {
       <AuthProvider>
         <Navbar/>
         <AlertProvider template={AlertTemplate} {...alertOptions}>
-            <Switch>
-              <Route path="/login" component={LoginPage}/>
-              <Route path="/register" component={RegisterPage}/>
               <UserProvider>
-                <ProtectedRoute path="/" component={HomePage} />
+                <Switch>
+                  <Route path="/login" component={LoginPage}/>
+                  <Route path="/register" component={RegisterPage}/>
+                    <ProtectedRoute path="/home" component={HomePage} />
+                  <Route component={LoginPage}/>
+                </Switch>
               </UserProvider>
-              <Route component={LoginPage}/>
-            </Switch>
         </AlertProvider>
       </AuthProvider>
     </div>

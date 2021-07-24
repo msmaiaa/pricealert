@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Button, TextField } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../../Context/AuthContext'
 import { history } from '../../helpers/history'
@@ -49,7 +49,7 @@ const LoginPage = () => {
 
 
   if(authenticated) {
-    history.push('/')
+    history.push('/home')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,7 +58,7 @@ const LoginPage = () => {
     if(loggedIn.status === 401) {
       alert.show(loggedIn.data.message)
     }else{
-      history.push('/')
+      history.push('/home')
     }
     console.log({ email, password })
   }
