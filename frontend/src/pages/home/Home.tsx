@@ -5,6 +5,9 @@ import { FaUser } from 'react-icons/fa'
 import generateDataTableColumns from "../../helpers/generateDataTableColumns"
 import DataTable from 'react-data-table-component'
 import { UserContext } from "../../Context/UserContext"
+import { Button } from "@material-ui/core"
+import { useAlert } from 'react-alert'
+import UserService from "../../services/UserService"
 
 const HomePageContainer = styled.div`
   margin-top: 100px;
@@ -23,6 +26,7 @@ const ProductListContainer = styled.div`
   align-items: center;
   flex-direction: column;
   padding: 16px 18px;
+  box-shadow: 3px 4px 3px 0px #000000;
 `
 
 const Header = styled.div`
@@ -46,16 +50,46 @@ const HeaderIcon = styled(FaUser)`
 
 const ProductList = styled.div`
   width: 100%;
-  height: 450px;
+  min-height: 200px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 `
 
+const StyledButton = styled(Button)`
+
+`
+
+const ProductListHeaderContainer = styled.div`
+  display: flex;
+  align-items: flex-end;
+`
+
+const ProductListTitle = styled.p`
+  font-size: 26px;
+  margin: 0;
+  font-weight: 300;
+  display: block;
+`
+
+interface IProduct {
+  createdAt: string
+  imgUlr: string
+  name: string
+  price: number
+  store: string
+  updatedAt: string
+  url: string
+  _id: string
+}
+
 const HomePage = () => {
+  const alert = useAlert()
   const { userProducts, handleUserProducts } = useContext(UserContext)
   const { userInfo, isLoading } = useContext(AuthContext)
-
-  const handleRowSelect = (state: any) => {
-    console.log('Selected rows: ' + state.selectedRows)
-  }
+  const [selectedRows, setSelectedRows] = useState([])
+  const [toggledClearRows, setToggledClearRows] = useState(false)
 
   useEffect(()=> {
     if(userInfo) {
@@ -63,9 +97,17 @@ const HomePage = () => {
     }
   },[userInfo])
 
-  useEffect(()=>{
-    console.log(userProducts)
-  }, [userProducts])
+  const handleDeleteProducts = async() => {
+    const deleted = await UserService.deleteProducts(selectedRows)
+    if(deleted.status === 200) {
+      handleUserProducts()
+      setToggledClearRows(true)
+      setSelectedRows([])
+      setToggledClearRows(false)
+      return
+    }
+    alert.show('Error while trying to delete the products.')
+  }
 
   if(isLoading) {
     return <HomePageContainer/>
@@ -81,14 +123,22 @@ const HomePage = () => {
           {userProducts && userProducts.length < 1 && <p>Looks like that you don't have any saved products, try adding one</p>}
           {userProducts && userProducts.length >= 1 &&
             <ProductList>
+              <ProductListHeaderContainer>
+                <ProductListTitle>Products</ProductListTitle>
+              </ProductListHeaderContainer>
               <DataTable 
-                title="Products"
                 columns={generateDataTableColumns()}
                 data={userProducts}
                 selectableRows
-                onSelectedRowsChange={handleRowSelect}
+                onSelectedRowsChange={(state: any) => setSelectedRows(state.selectedRows)}
+                clearSelectedRows={toggledClearRows}
               />
             </ProductList>
+          }
+          {selectedRows.length > 0 && 
+            <StyledButton variant="contained" color="secondary" onClick={handleDeleteProducts}>
+            Delete
+            </StyledButton>
           }
         </ProductListContainer>
       </HomePageContainer>

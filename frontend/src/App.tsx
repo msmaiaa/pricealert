@@ -12,10 +12,11 @@ import { transitions, positions, Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 
 const alertOptions = {
-  position: positions.BOTTOM_CENTER,
-  timeout: 5000,
+  position: positions.BOTTOM_LEFT,
+  timeout: 3000,
   offset: '30px',
-  transition: transitions.SCALE
+  transition: transitions.SCALE,
+  type: 'info'
 }
 
 function App(props: any) {
@@ -25,21 +26,16 @@ function App(props: any) {
         <Navbar/>
         <AlertProvider template={AlertTemplate} {...alertOptions}>
             <Switch>
+              <Route path="/login" component={LoginPage}/>
+              <Route path="/register" component={RegisterPage}/>
               <UserProvider>
-                <ProtectedRoute exact path="/" component={HomePage} />
+                <ProtectedRoute path="/" component={HomePage} />
               </UserProvider>
-              <Route exact path="/login">
-                <LoginPage/>
-              </Route>
-              <Route exact path="/register">
-                <RegisterPage/>
-              </Route> 
               <Route component={LoginPage}/>
             </Switch>
         </AlertProvider>
       </AuthProvider>
     </div>
-  );
-}
+    )}
 
 export default App

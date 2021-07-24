@@ -33,9 +33,9 @@ class UserService {
     }
   }
 
-  async deleteProducts(): Promise<any> {
+  async deleteProducts(products: Array<IProduct>): Promise<any> {
     try{
-      const deletedProducts = await axios.delete(API_URL, { headers: authHeader() })
+      const deletedProducts = await axios.delete(API_URL, { headers: authHeader(), data: { products: products }})
       return deletedProducts
     }catch(error){
       console.error(error)
