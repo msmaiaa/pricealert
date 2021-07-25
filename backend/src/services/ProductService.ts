@@ -1,4 +1,5 @@
 import ProductsRepository, { ProductType } from '../repositories/ProductsRepository'
+import UserService from './UserService'
 
 export default new class ProductService {
   async findAllWithUserId(userid: string): Promise<Array<ProductType>> {
@@ -65,6 +66,19 @@ export default new class ProductService {
     try{
       const products = await ProductsRepository.findAll()
       return products
+    }catch(e) {
+      console.error(e)
+    }
+  }
+
+  async getUsersFromProduct(product: any): Promise<any> {
+    try{
+      const usersMap = product.usersWatching.map(async(userid: string) => {
+        const user = await UserService.findUserById(userid)
+        return user
+      })
+      const users = await Promise.all(usersMap)
+      return users
     }catch(e) {
       console.error(e)
     }
