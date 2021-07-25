@@ -10,5 +10,5 @@ mongoose.connect(`${process.env.MONGO_URI}`, { useNewUrlParser: true, useUnified
   app.listen(process.env.PORT || 5000, () => {
     console.log('App listening')
   })
-  ScrapingService.startInfiniteScraping()
+  if(process.env.START_SCRAPING === 'TRUE') ScrapingService.startInfiniteScraping()
 })
