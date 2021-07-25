@@ -1,4 +1,5 @@
 import axios from 'axios'
+import authHeader from './AuthHeader'
 
 const API_URL: string = 'http://localhost:5000/auth/user'
 
@@ -58,6 +59,15 @@ class AuthService {
       return response
     }catch(error) {
       return error.response
+    }
+  }
+
+  async updateUser(user: any): Promise<any> {
+    try{
+      const updated = await axios.put(API_URL + '/update', { user }, { headers: authHeader()})
+      return updated
+    }catch(error){
+      console.error(error)
     }
   }
 }

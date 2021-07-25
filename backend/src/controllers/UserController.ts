@@ -35,6 +35,7 @@ export default new class UserController {
         notifyIfPriceGoesHigher: foundUser.notifyIfPriceGoesHigher,
         notifyIfPriceGoesLower: foundUser.notifyIfPriceGoesLower,
         notifyIfProductIsOOS: foundUser.notifyIfProductIsOOS,
+        discordHookUrl: foundUser.discordHookUrl,
         _id: foundUser._id,
         username: foundUser.username,
         email: foundUser.email,
