@@ -84,4 +84,13 @@ export default new class ProductRepository {
       console.error(e)
     }
   }
+
+  async findAll() {
+    try{
+      const productsInDb = await Product.find()
+      return productsInDb
+    }catch(e) {
+      console.error(e)
+    }
+  }
 }

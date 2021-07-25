@@ -60,4 +60,13 @@ export default new class ProductService {
       return false
     }
   }
+
+  async getAllProducts() {
+    try{
+      const products = await ProductsRepository.findAll()
+      return products
+    }catch(e) {
+      console.error(e)
+    }
+  }
 }
