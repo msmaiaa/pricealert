@@ -55,7 +55,7 @@ export default new class ProductService {
         return ProductsRepository.deleteUserFromProduct(userid, productInMap._id)
       })
       const deleted = Promise.all(productsToDeletePromises)
-      return productsToDelete
+      return deleted
     }catch(e) {
       console.error(e)
       return false
@@ -79,6 +79,15 @@ export default new class ProductService {
       })
       const users = await Promise.all(usersMap)
       return users
+    }catch(e) {
+      console.error(e)
+    }
+  }
+
+  async updateProductPrice(product: ProductType, newPrice: number): Promise<any> {
+    try{
+      const updated = await ProductsRepository.updateOne({ _id:product._id, updateInfo: {price: newPrice}})
+      return updated
     }catch(e) {
       console.error(e)
     }

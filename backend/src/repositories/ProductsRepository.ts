@@ -93,4 +93,14 @@ export default new class ProductRepository {
       console.error(e)
     }
   }
+
+  async updateOne ({_id, updateInfo}: any) {
+    try{
+      const productInDb = await Product.updateOne({ _id }, updateInfo)
+      return productInDb
+    }catch(e) {
+      console.error(e)
+      return false
+    }
+  }
 }
