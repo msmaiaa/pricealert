@@ -1,4 +1,5 @@
 import ProductsRepository, { ProductType } from '../repositories/ProductsRepository'
+import UserService from './UserService'
 
 export default new class ProductService {
   async findAllWithUserId(userid: string): Promise<Array<ProductType>> {
@@ -54,10 +55,41 @@ export default new class ProductService {
         return ProductsRepository.deleteUserFromProduct(userid, productInMap._id)
       })
       const deleted = Promise.all(productsToDeletePromises)
-      return productsToDelete
+      return deleted
     }catch(e) {
       console.error(e)
       return false
+    }
+  }
+
+  async getAllProducts() {
+    try{
+      const products = await ProductsRepository.findAll()
+      return products
+    }catch(e) {
+      console.error(e)
+    }
+  }
+
+  async getUsersFromProduct(product: any): Promise<any> {
+    try{
+      const usersMap = product.usersWatching.map(async(userid: string) => {
+        const user = await UserService.findUserById(userid)
+        return user
+      })
+      const users = await Promise.all(usersMap)
+      return users
+    }catch(e) {
+      console.error(e)
+    }
+  }
+
+  async updateProductPrice(product: ProductType, newPrice: number): Promise<any> {
+    try{
+      const updated = await ProductsRepository.updateOne({ _id:product._id, updateInfo: {price: newPrice}})
+      return updated
+    }catch(e) {
+      console.error(e)
     }
   }
 }

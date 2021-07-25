@@ -1,3 +1,4 @@
+import { ProductType } from "../repositories/ProductsRepository"
 import UserRepository from "../repositories/UserRepository"
 
 interface IUserRegistrationBody {
@@ -20,6 +21,16 @@ export default new class UserService {
   async findUserByEmail(email: string) {
     try{
       const foundUser = await UserRepository.findOne(email)
+      return foundUser
+    }catch(e) {
+      console.error(e)
+      return e
+    }
+  }
+
+  async findUserById(id: string) {
+    try{
+      const foundUser = await UserRepository.findOneById(id)
       return foundUser
     }catch(e) {
       console.error(e)

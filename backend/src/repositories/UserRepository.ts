@@ -38,6 +38,16 @@ export default new class UserRepository {
     }
   }
 
+  async findOneById (_id: string) {
+    try{
+      const userInDB = await User.findOne({ _id }).exec()
+      return userInDB
+    }catch(e) {
+      console.error(e)
+      return false
+    }
+  }
+
   async updateOne (updateInfo: any, userid: string) {
     try{
       const userInDB = await User.updateOne({ _id: userid}, updateInfo)

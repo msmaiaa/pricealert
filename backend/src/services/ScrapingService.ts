@@ -5,6 +5,8 @@ import vanillaPuppeteer from 'puppeteer'
 import { Cluster } from 'puppeteer-cluster'
 import { addExtra } from "puppeteer-extra"
 import Stealth from "puppeteer-extra-plugin-stealth"
+import ProductService from './ProductService'
+import NotificationService from './NotificationService'
 const puppeteer = addExtra(vanillaPuppeteer as any)
 puppeteer.use(Stealth())
 
@@ -19,12 +21,52 @@ interface PuppeteerClusterParams {
   }
 }
 
+interface InfinitePuppeterClusterParams {
+  page: vanillaPuppeteer.Page
+  data: ProductType
+}
+
+//still need to handle unavailable products
 export default new class ScrapingService {
   supportedStores = ["kabum", "pichau", "terabyte"]
   storesThatChangePriceXpath = ["kabum", "pichau"]
 
   async startInfiniteScraping () {
+    const cluster = await this.generateCluster(1, false)
+    const StartRecursiveScrapingQueue = async() => {
+      const products: Array<ProductType> = await ProductService.getAllProducts()
+      for(const product of products) {
+        cluster.queue(product, async({ page, data }: InfinitePuppeterClusterParams) => {
+          await page.goto(product.url)
+          await page.waitForTimeout(2000)
+          const notFormattedPrice = await this.getProductPrice(product.store, page)
+          const formattedPrice = Accounting.formatPriceToFloat(notFormattedPrice)
+          await this.handleProductChange(product, formattedPrice)
+        })
+      }
+      //waits until all the cluster tasks are fulfilled
+      await cluster.idle()
+      //do it again
+      await StartRecursiveScrapingQueue()
+    }
+    await StartRecursiveScrapingQueue()
+    await cluster.close()
+  }
 
+  //change to another service
+  async handleProductChange(product: ProductType, currentPrice: number) {
+    try{
+      if(currentPrice === product.price) return
+      if(currentPrice > product.price) {
+        await NotificationService.handlePrices(product, currentPrice, 'priceLower')
+      }
+      if(currentPrice < product.price) {
+        await NotificationService.handlePrices(product, currentPrice, 'priceLower')
+      }
+      await ProductService.updateProductPrice(product, currentPrice)
+    }catch(e) {
+      console.error(e)
+    }
   }
 
   async generateCluster(maxConcurrency: number, headless: boolean): Promise<Cluster> {
