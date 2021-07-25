@@ -26,4 +26,14 @@ export default new class UserService {
       return e
     }
   }
+
+  async updateUser(updateInfo: any, userid: string) {
+    try{
+      const foundUser = await UserRepository.updateOne(updateInfo, userid)
+      return foundUser
+    }catch(e) {
+      console.error(e)
+      return e
+    }
+  }
 }
