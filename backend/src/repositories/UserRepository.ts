@@ -37,4 +37,15 @@ export default new class UserRepository {
       return false
     }
   }
+
+  async updateOne (updateInfo: any, userid: string) {
+    try{
+      const userInDB = await User.updateOne({ _id: userid}, updateInfo)
+      return userInDB
+    }catch(e) {
+      console.error(e)
+      return false
+    }
+  }
+
 }
