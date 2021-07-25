@@ -5,6 +5,7 @@ import vanillaPuppeteer from 'puppeteer'
 import { Cluster } from 'puppeteer-cluster'
 import { addExtra } from "puppeteer-extra"
 import Stealth from "puppeteer-extra-plugin-stealth"
+import ProductService from './ProductService'
 const puppeteer = addExtra(vanillaPuppeteer as any)
 puppeteer.use(Stealth())
 
@@ -19,11 +20,35 @@ interface PuppeteerClusterParams {
   }
 }
 
+interface InfinitePuppeterClusterParams {
+  page: vanillaPuppeteer.Page
+  data: ProductType
+}
+
 export default new class ScrapingService {
   supportedStores = ["kabum", "pichau", "terabyte"]
   storesThatChangePriceXpath = ["kabum", "pichau"]
 
   async startInfiniteScraping () {
+    const cluster = await this.generateCluster(2, false)
+    const StartRecursiveScrapingQueue = async() => {
+      const products: Array<ProductType> = await ProductService.getAllProducts()
+      for(const product of products) {
+        cluster.queue(product, async({ page, data }: InfinitePuppeterClusterParams) => {
+          await page.goto(product.url)
+          await page.waitForTimeout(2000)
+        })
+      }
+      //waits until all the cluster tasks are fulfilled
+      await cluster.idle()
+      //do it again
+      await StartRecursiveScrapingQueue()
+    }
+    await StartRecursiveScrapingQueue()
+    await cluster.close()
+  }
+
+  async handleProductChange(product: ProductType, currentPrice: number) {
 
   }
 
