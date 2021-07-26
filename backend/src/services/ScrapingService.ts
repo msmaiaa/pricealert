@@ -32,13 +32,12 @@ export default new class ScrapingService {
   storesThatChangePriceXpath = ["kabum", "pichau"]
 
   async startInfiniteScraping () {
-    const cluster = await this.generateCluster(1, false)
+    const cluster = await this.generateCluster(1, true)
     const StartRecursiveScrapingQueue = async() => {
       const products: Array<ProductType> = await ProductService.getAllProducts()
       for(const product of products) {
         cluster.queue(product, async({ page, data }: InfinitePuppeterClusterParams) => {
           await page.goto(product.url)
-          await page.waitForTimeout(2000)
           const notFormattedPrice = await this.getProductPrice(product.store, page)
           const formattedPrice = Accounting.formatPriceToFloat(notFormattedPrice)
           await this.handleProductChange(product, formattedPrice)
@@ -99,8 +98,8 @@ export default new class ScrapingService {
     })
     let productsWithInfo: Array<ProductType> = []
 
-    const cluster: Cluster = await this.generateCluster(1, false)
-
+    const cluster: Cluster = await this.generateCluster(1, true)
+    console.log('after cluster')
     for(const prod of productsWithStore) {
       cluster.queue({ prod }, async ({page, data}: PuppeteerClusterParams): Promise<any> => {
         const fullProduct = {
