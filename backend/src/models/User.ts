@@ -34,7 +34,6 @@ const UserSchema = new mongoose.Schema({
     },
     discordHookUrl: {
       type: String,
-      required: true,
       default: ''
     },
     password: {
