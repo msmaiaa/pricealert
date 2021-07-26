@@ -99,7 +99,6 @@ export default new class ScrapingService {
     let productsWithInfo: Array<ProductType> = []
 
     const cluster: Cluster = await this.generateCluster(1, true)
-    console.log('after cluster')
     for(const prod of productsWithStore) {
       cluster.queue({ prod }, async ({page, data}: PuppeteerClusterParams): Promise<any> => {
         const fullProduct = {
@@ -137,9 +136,9 @@ export default new class ScrapingService {
   }
 
   async getProductImage(store: string, page: vanillaPuppeteer.Page): Promise<string> {
-    const imgUrlXpath: string = config.imageElement[store as 'kabum' | 'terabyte' | 'pichau']
+    let imgUrlXpath: string = config.imageElement[store as 'kabum' | 'terabyte' | 'pichau']
     await page.waitForXPath(imgUrlXpath)
-    const imgUrlElement = await page.$x(imgUrlXpath)
+    let imgUrlElement = await page.$x(imgUrlXpath)
     const imgUrl = await page.evaluate(el => el.getAttribute('src'), imgUrlElement[0])
     return Promise.resolve(imgUrl)
   }

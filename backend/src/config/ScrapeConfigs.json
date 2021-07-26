@@ -20,6 +20,6 @@
 "imageElement": {
     "kabum": "//*[@id='imagem-slide']/li[1]/img",
     "pichau": "//*[@id='__next']/main/div[2]/div/div[1]/div/div/div/div/div/ul/li[1]/div/div/img",
-    "terabyte": "//*[@id='body']/div[3]/div[1]/div[1]/div[2]/div/div[4]/div/div/div[2]/div/div/div/img[2]"
+    "terabyte": "//*[@id='img-preco-topo']"
 }
 }
