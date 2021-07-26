@@ -1,7 +1,7 @@
 import axios from 'axios'
 import authHeader from './AuthHeader'
 
-const API_URL = process.env.API_URL || 'http://localhost:5000/api/products'
+const API_URL = process.env.REACT_APP_API_URL + 'api/products' || 'http://localhost:5000/api/products'
 
 interface IProduct {
   _id: string

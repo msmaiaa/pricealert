@@ -1,3 +1,5 @@
+const dotenv = require('dotenv')
+dotenv.config()
 const express = require("express")
 const path = require('path')
 const app = express();
@@ -8,4 +10,4 @@ app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.listen(3000);
+app.listen(process.env.port || 3000);
