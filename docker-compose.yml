@@ -1,7 +1,0 @@
-version: "3"
-services:
-  pricealert-frontend:
-    image: pricealert-frontend
-    stdin_open: true
-    ports:
-      - "80:3000"
