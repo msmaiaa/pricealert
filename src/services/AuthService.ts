@@ -51,7 +51,7 @@ class AuthService {
 
   async register({ username, email, password}: IRegisterFormParams):Promise<any> {
     try{
-      const response = await axios.post(API_URL + '/auth/user/register', {
+      const response = await axios.post(API_URL + 'auth/user/register', {
         username,
         email,
         password
@@ -64,7 +64,7 @@ class AuthService {
 
   async updateUser(user: any): Promise<any> {
     try{
-      const updated = await axios.put(API_URL + '/auth/user/update', { user }, { headers: authHeader()})
+      const updated = await axios.put(API_URL + 'auth/user/update', { user }, { headers: authHeader()})
       return updated
     }catch(error){
       console.error(error)
